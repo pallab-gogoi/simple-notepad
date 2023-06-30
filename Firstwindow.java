@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,38 +35,21 @@ public class Firstwindow extends Frame implements ActionListener{
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File", getFocusTraversalKeysEnabled());
         Menu menuEdit = new Menu("Edit", getFocusTraversalKeysEnabled());
-        Menu fontMenu = new Menu("Select font", getFocusTraversalKeysEnabled());
-        Menu fontSize = new Menu("Font size");
-        Menu fontStyle = new Menu("Font style");
-        menuEdit.add(fontMenu);
-        menuEdit.add(fontSize);
-        menuEdit.add(fontStyle);
-        MenuItem fontSerif = new MenuItem("Serif", null);
-        MenuItem fontSansSerif = new MenuItem("SansSerif", null);
-        MenuItem fontMonospaced = new MenuItem("Monospaced", null);
-        fontMenu.add(fontSerif);
-        fontMenu.add(fontSansSerif);
-        fontMenu.add(fontMonospaced);
-
-        MenuItem fontPlain = new MenuItem("Plain", null);
-        MenuItem fontBold = new MenuItem("Bold", null);
-        MenuItem fontItalic = new MenuItem("Italic", null);
-        fontStyle.add(fontPlain);
-        fontStyle.add(fontBold);
-        fontStyle.add(fontItalic);
+        MenuItem fontSetupEdit = new MenuItem("Font setup");
+        
+        menuEdit.add(fontSetupEdit);
+        
         
         Menu menuHelp = new Menu("Help", getFocusTraversalKeysEnabled());
         
         Panel panel = new Panel(new BorderLayout());
 
-        //JPanel textJPanel = new JPanel(new BorderLayout());
         frame.setSize(400, 400);
-        //frame.setLayout(null);
+   
         
         frame.setMenuBar(menuBar);
         frame.setResizable(true);
-        //frame.add(textArea, BorderLayout.CENTER );
-        //frame.add(textJPanel, BorderLayout.CENTER);
+      
         frame.add(choice); // here
         panel.add(textArea);
         frame.add(panel);
@@ -79,10 +63,6 @@ public class Firstwindow extends Frame implements ActionListener{
         MenuItem openFile = new MenuItem("Open file");
         MenuItem saveFile = new MenuItem("Save file", null);
         MenuItem exitWindow = new MenuItem("Exit", null);
-      
-
-        
-
         MenuItem github = new MenuItem("Github", null);
         MenuItem about = new MenuItem("About", null);
 
@@ -96,33 +76,11 @@ public class Firstwindow extends Frame implements ActionListener{
         menuHelp.add(github);
         menuHelp.add(about);
 
-        fontBold.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent bolderror){
-                fontName="Bold";
+        fontSetupEdit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent fontsetupp){
+                fontSetup();
             }
         });
-        fontItalic.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent bolderror){
-                fontName="Italic";
-            }
-        });
-
-        fontSerif.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent serif){
-                fontSet("Serif");
-            }
-        });
-        fontSansSerif.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent serif){
-                fontSet("SansSerif");
-            }
-        });
-        fontMonospaced.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent serif){
-                fontSet("Monospaced");
-            }
-        });
-
         openFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent openerror){
                 openFile();
@@ -267,10 +225,89 @@ public class Firstwindow extends Frame implements ActionListener{
     private void showMessage(String message, String title, int messageType) {
         JOptionPane.showMessageDialog(this, message, title, messageType);
     }
-    private void fontSet(String selectedFont){
-       Font font = new Font(selectedFont, Font.PLAIN, 14);
+    private void fontSet(String selectedFontFamily, String selectedFontStyle,int selectedFontSize){
+       int fontStyle;
+   if (selectedFontStyle.equals("Plain")) {
+       fontStyle = Font.PLAIN;
+   } else if (selectedFontStyle.equals("Bold")) {
+       fontStyle = Font.BOLD;
+   } else if (selectedFontStyle.equals("Italic")) {
+       fontStyle = Font.ITALIC;
+   } else {
+       fontStyle = Font.PLAIN; // Default to plain if the style is not recognized
+   }
+        Font font = new Font(selectedFontFamily,fontStyle,selectedFontSize);
        textArea.setFont(font);
  
+    }
+    private void fontSetup(){
+        Frame fontSetupFrame = new Frame("Font Setup");
+        fontSetupFrame.setSize(300, 300);
+        centerWindow(fontSetupFrame);
+        fontSetupFrame.setVisible(true);
+        fontSetupFrame.setResizable(false);
+        fontSetupFrame.setLayout(null);
+        fontSetupFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing (WindowEvent e){
+                fontSetupFrame.dispose();
+            }
+        });
+
+        Label fontFamily = new Label("Family");
+        fontFamily.setBounds(50, 50, 80, 40);
+        Label fontStyle = new Label("Style");
+        fontStyle.setBounds(50, 100, 80, 40);
+        Label fontSize = new Label("Size");
+        fontSize.setBounds(50, 150, 80, 40);
+        Button saveFontButton = new Button("Save");
+        saveFontButton.setBounds(100,220,80,40);
+        fontSetupFrame.add(saveFontButton);
+
+        Choice ffamily = new Choice();
+        ffamily.setBounds(150,60,80,40);
+        ffamily.add("Serif");
+        ffamily.add("SansSerif");
+        ffamily.add("Monospaced");
+
+        Choice fstyle = new Choice();
+        fstyle.setBounds(150,110,80,40);
+        fstyle.add("Plain");
+        fstyle.add("Italic");
+        fstyle.add("Bold");
+
+        Choice fsize = new Choice();
+        fsize.setBounds(150,160,80,40);
+        fsize.add("10");
+        fsize.add("12");
+        fsize.add("14");
+        fsize.add("16");
+        fsize.add("18");
+        fsize.add("20");
+        fsize.add("22");
+        fsize.add("24");
+    
+        fontSetupFrame.add(ffamily);
+        fontSetupFrame.add(fstyle);
+        fontSetupFrame.add(fsize);
+
+        fontSetupFrame.add(fontFamily);
+        fontSetupFrame.add(fontStyle);
+        fontSetupFrame.add(fontSize);
+
+        saveFontButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                String selectedFontFamily = ffamily.getItem(ffamily.getSelectedIndex());
+                String selectedFontStyle = fstyle.getItem(fstyle.getSelectedIndex());
+                Integer selectedFontSize = Integer.valueOf(fsize.getItem(fsize.getSelectedIndex()));
+                fontSet(selectedFontFamily, selectedFontStyle, selectedFontSize);
+                try{
+                    Thread.sleep(1000);
+                    fontSetupFrame.dispose();
+                }catch(Exception ef){
+                    System.out.println("Exception changing font");
+                }
+            }
+        });
     }
     
 }
