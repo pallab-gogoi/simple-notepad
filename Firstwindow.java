@@ -20,12 +20,13 @@ import java.awt.event.WindowAdapter;
 public class Firstwindow extends Frame implements ActionListener{
     TextArea textArea = new TextArea();
     String filename="New File ";
+  
     private JFileChooser fileChooser;
     Frame frame = new Frame( filename+"-Notepad", null);
 
 
 
-    String text;
+    String text,fontName;
     Firstwindow(){
         System.out.println("Constructor");
         Choice choice = new Choice();
@@ -33,7 +34,28 @@ public class Firstwindow extends Frame implements ActionListener{
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File", getFocusTraversalKeysEnabled());
         Menu menuEdit = new Menu("Edit", getFocusTraversalKeysEnabled());
+        Menu fontMenu = new Menu("Select font", getFocusTraversalKeysEnabled());
+        Menu fontSize = new Menu("Font size");
+        Menu fontStyle = new Menu("Font style");
+        menuEdit.add(fontMenu);
+        menuEdit.add(fontSize);
+        menuEdit.add(fontStyle);
+        MenuItem fontSerif = new MenuItem("Serif", null);
+        MenuItem fontSansSerif = new MenuItem("SansSerif", null);
+        MenuItem fontMonospaced = new MenuItem("Monospaced", null);
+        fontMenu.add(fontSerif);
+        fontMenu.add(fontSansSerif);
+        fontMenu.add(fontMonospaced);
+
+        MenuItem fontPlain = new MenuItem("Plain", null);
+        MenuItem fontBold = new MenuItem("Bold", null);
+        MenuItem fontItalic = new MenuItem("Italic", null);
+        fontStyle.add(fontPlain);
+        fontStyle.add(fontBold);
+        fontStyle.add(fontItalic);
+        
         Menu menuHelp = new Menu("Help", getFocusTraversalKeysEnabled());
+        
         Panel panel = new Panel(new BorderLayout());
 
         //JPanel textJPanel = new JPanel(new BorderLayout());
@@ -52,10 +74,14 @@ public class Firstwindow extends Frame implements ActionListener{
         menuBar.add(menuEdit);
         menuBar.add(menuHelp);
 
+
         MenuItem newWindow = new MenuItem("New window", null);
         MenuItem openFile = new MenuItem("Open file");
         MenuItem saveFile = new MenuItem("Save file", null);
         MenuItem exitWindow = new MenuItem("Exit", null);
+      
+
+        
 
         MenuItem github = new MenuItem("Github", null);
         MenuItem about = new MenuItem("About", null);
@@ -66,8 +92,36 @@ public class Firstwindow extends Frame implements ActionListener{
         menuFile.add(openFile);
         menuFile.add(saveFile);
         menuFile.add(exitWindow);
+        
         menuHelp.add(github);
         menuHelp.add(about);
+
+        fontBold.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent bolderror){
+                fontName="Bold";
+            }
+        });
+        fontItalic.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent bolderror){
+                fontName="Italic";
+            }
+        });
+
+        fontSerif.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent serif){
+                fontSet("Serif");
+            }
+        });
+        fontSansSerif.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent serif){
+                fontSet("SansSerif");
+            }
+        });
+        fontMonospaced.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent serif){
+                fontSet("Monospaced");
+            }
+        });
 
         openFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent openerror){
@@ -213,4 +267,10 @@ public class Firstwindow extends Frame implements ActionListener{
     private void showMessage(String message, String title, int messageType) {
         JOptionPane.showMessageDialog(this, message, title, messageType);
     }
+    private void fontSet(String selectedFont){
+       Font font = new Font(selectedFont, Font.PLAIN, 14);
+       textArea.setFont(font);
+ 
+    }
+    
 }
