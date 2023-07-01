@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,15 +28,35 @@ public class Firstwindow extends Frame implements ActionListener{
 
     String text,fontName;
     Firstwindow(){
-        System.out.println("Constructor");
+       
         Choice choice = new Choice();
-
+      
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File", getFocusTraversalKeysEnabled());
         Menu menuEdit = new Menu("Edit", getFocusTraversalKeysEnabled());
         MenuItem fontSetupEdit = new MenuItem("Font setup");
         
+        Menu setTheme = new Menu("Theme");
+        
+        MenuItem lightTheme = new MenuItem("Light");
+        MenuItem darkTheme = new MenuItem("Dark", null);
+        
         menuEdit.add(fontSetupEdit);
+        menuEdit.add(setTheme);
+        setTheme.add(lightTheme);
+        setTheme.add(darkTheme);
+
+        lightTheme.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                themeSet("Light");
+            }
+        });
+        darkTheme.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                themeSet("Dark");
+            }
+        });
+
         
         
         Menu menuHelp = new Menu("Help", getFocusTraversalKeysEnabled());
@@ -49,10 +68,13 @@ public class Firstwindow extends Frame implements ActionListener{
         
         frame.setMenuBar(menuBar);
         frame.setResizable(true);
+        frame.setAlwaysOnTop(true);
       
         frame.add(choice); // here
         panel.add(textArea);
         frame.add(panel);
+
+       
 
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
@@ -194,6 +216,7 @@ public class Firstwindow extends Frame implements ActionListener{
         confirmFrame.add(cancelButton);
         confirmFrame.add(saveButton);
         confirmFrame.setResizable(false);
+        confirmFrame.setAlwaysOnTop(true);
 
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
@@ -213,8 +236,7 @@ public class Firstwindow extends Frame implements ActionListener{
                 confirmFrame.dispose();
             }
         });
-        System.out.println("Application closed..");
-        System.out.println("Relesing Memory..");
+        
 
     }
     @Override
@@ -239,6 +261,16 @@ public class Firstwindow extends Frame implements ActionListener{
         Font font = new Font(selectedFontFamily,fontStyle,selectedFontSize);
        textArea.setFont(font);
  
+    }
+    private void themeSet(String choice){
+        if(choice == "Light"){
+         textArea.setBackground(Color.WHITE);
+         textArea.setForeground(Color.BLACK);
+        }
+        if(choice =="Dark"){
+         textArea.setBackground(Color.DARK_GRAY);
+         textArea.setForeground(Color.CYAN);
+        }
     }
     private void fontSetup(){
         Frame fontSetupFrame = new Frame("Font Setup");
@@ -304,7 +336,7 @@ public class Firstwindow extends Frame implements ActionListener{
                     Thread.sleep(1000);
                     fontSetupFrame.dispose();
                 }catch(Exception ef){
-                    System.out.println("Exception changing font");
+              
                 }
             }
         });
