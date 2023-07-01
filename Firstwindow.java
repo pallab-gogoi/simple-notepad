@@ -156,6 +156,7 @@ public class Firstwindow extends Frame implements ActionListener{
     }
     private void openFile(){
         fileChooser = new JFileChooser();
+        frame.setAlwaysOnTop(false);
         fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
         int result = fileChooser.showOpenDialog(this);
          if (result == JFileChooser.APPROVE_OPTION) {
@@ -171,9 +172,12 @@ public class Firstwindow extends Frame implements ActionListener{
             showMessage("Error opening file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+     frame.setAlwaysOnTop(true);
     }
     private void saveFileDialog(){
         JFileChooser fileChooser = new JFileChooser();
+        frame.setAlwaysOnTop(false);
+       
                 int option = fileChooser.showSaveDialog(fileChooser);
 
                 if (option == JFileChooser.APPROVE_OPTION){
@@ -189,6 +193,7 @@ public class Firstwindow extends Frame implements ActionListener{
                         JOptionPane.showMessageDialog(fileChooser, "Error saving file: " + er.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
+                frame.setAlwaysOnTop(true);
     }
     private void centerWindow(Window window){
         Dimension screeDimension = Toolkit.getDefaultToolkit().getScreenSize();
