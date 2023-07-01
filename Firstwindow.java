@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,7 +24,7 @@ public class Firstwindow extends Frame implements ActionListener{
   
     private JFileChooser fileChooser;
     Frame frame = new Frame( filename+"-Notepad", null);
-
+    Frame fontSetupFrame;
 
 
     String text,fontName;
@@ -111,7 +112,9 @@ public class Firstwindow extends Frame implements ActionListener{
 
         about.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev){
-                JOptionPane.showMessageDialog(null,"Inspired by Windows Notepad \n Created by Pallab Gogoi.", "About", JOptionPane.INFORMATION_MESSAGE);
+                JDialog dialog = new JDialog();
+                dialog.setAlwaysOnTop(true);
+                JOptionPane.showMessageDialog(dialog,"Inspired by Windows Notepad \n Created by Pallab Gogoi.", "About", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         github.addActionListener(new ActionListener() {
@@ -142,8 +145,11 @@ public class Firstwindow extends Frame implements ActionListener{
             @Override
             public void windowClosing(WindowEvent e) {
                 // TODO Auto-generated method stub
-                closeWindow(e);
-            }
+                try{
+                    fontSetupFrame.dispose();
+                }finally{
+                    closeWindow(e);
+            }}
         });
         centerWindow(frame);
         frame.setVisible(true);
@@ -273,12 +279,14 @@ public class Firstwindow extends Frame implements ActionListener{
         }
     }
     private void fontSetup(){
-        Frame fontSetupFrame = new Frame("Font Setup");
+        
+        fontSetupFrame = new Frame("Font Setup");
         fontSetupFrame.setSize(300, 300);
         centerWindow(fontSetupFrame);
         fontSetupFrame.setVisible(true);
         fontSetupFrame.setResizable(false);
         fontSetupFrame.setLayout(null);
+        fontSetupFrame.setAlwaysOnTop(true);
         fontSetupFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing (WindowEvent e){
                 fontSetupFrame.dispose();
@@ -297,9 +305,11 @@ public class Firstwindow extends Frame implements ActionListener{
 
         Choice ffamily = new Choice();
         ffamily.setBounds(150,60,80,40);
+        ffamily.add("Ariel");
         ffamily.add("Serif");
         ffamily.add("SansSerif");
         ffamily.add("Monospaced");
+
 
         Choice fstyle = new Choice();
         fstyle.setBounds(150,110,80,40);
